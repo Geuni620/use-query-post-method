@@ -1,5 +1,15 @@
-import {Button} from "@/components/ui/button"
+import { TableComponents } from '@/components/table';
+import { TableCaption } from '@/components/ui/table';
 
 export default function Home() {
-  return <Button>Test</Button>
+  return (
+    <div className="h-screen w-screen">
+      <div className="mx-auto w-[900px] pb-20 pt-10">
+        <TableCaption className="mb-10 text-3xl font-bold">
+          Tanstack Table
+        </TableCaption>
+        <TableComponents />
+      </div>
+    </div>
+  );
 }
