@@ -10,6 +10,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
+import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
 import { useState } from 'react';
 
@@ -32,6 +33,7 @@ interface ColumnDataProps {
   task: string;
   status: Status;
   notes: string;
+  date: Date;
 }
 
 interface TableProps {
@@ -101,6 +103,11 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
       size: 300,
       cell: (props) => <p>{props.getValue()}</p>,
       enableSorting: false,
+    }),
+    columnHelper.accessor('date', {
+      header: 'Date',
+      size: 200,
+      cell: (props) => <p>{format(props.getValue(), 'yyyy-MM-dd HH:mm:ss')}</p>,
     }),
   ];
 

@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef } from 'react';
 
 import { TableComponents } from '@/components/table';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTableDataGetMutation } from '@/hook/useTableDataGetMutation';
 
@@ -36,6 +37,7 @@ export default function Home() {
             type="text"
             placeholder="Task name"
           />
+          <Button>Done!</Button>
         </form>
         <TableComponents data={tableList.data?.list || []} />
       </div>
