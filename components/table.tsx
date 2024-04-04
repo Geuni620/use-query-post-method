@@ -53,6 +53,8 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  console.log('rowSelection', rowSelection);
+
   const columnHelper = createColumnHelper<ColumnDataProps>();
   const columns = [
     {
