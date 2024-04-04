@@ -14,6 +14,7 @@ import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
 import { useState } from 'react';
 
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Table,
@@ -23,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useToggleMutation } from '@/hook/useToggleMutation';
 
 interface Status {
   id: number;
@@ -49,11 +51,10 @@ type TableComponentsProps = {
 };
 
 export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
+  const toggleMutation = useToggleMutation();
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-
-  console.log('rowSelection', rowSelection);
 
   const columnHelper = createColumnHelper<ColumnDataProps>();
   const columns = [
@@ -185,6 +186,14 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
           ))}
         </TableBody>
       </Table>
+      <div className="flex w-full items-center justify-end p-2">
+        <Button
+          onClick={() => toggleMutation.mutate({ selectedRow: rowSelection })}
+          className="mt-2 text-end"
+        >
+          Done!
+        </Button>
+      </div>
     </>
   );
 };

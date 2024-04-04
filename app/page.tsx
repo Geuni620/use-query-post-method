@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useRef } from 'react';
 
 import { TableComponents } from '@/components/table';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTableDataGetMutation } from '@/hook/useTableDataGetMutation';
 
@@ -24,9 +23,6 @@ export default function Home() {
     }
   };
 
-  // TODO: Checkbox 클릭 후 설정하면 상태 변경되도록 구현
-  // 이때 Date가 변경되어야함
-
   return (
     <div className="h-screen w-screen">
       <div className="mx-auto w-[900px] pb-20 pt-10">
@@ -40,7 +36,6 @@ export default function Home() {
             type="text"
             placeholder="Task name"
           />
-          <Button>Done!</Button>
         </form>
         <TableComponents data={tableList.data?.list || []} />
       </div>
