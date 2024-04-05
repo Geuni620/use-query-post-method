@@ -26,14 +26,11 @@ import {
 } from '@/components/ui/table';
 import { useToggleMutation } from '@/hook/useToggleMutation';
 
-interface Status {
-  id: number;
-  name: string;
-}
-
 interface ColumnDataProps {
+  id: number;
   task: string;
-  status: Status;
+  statusId: number;
+  statusName: string;
   notes: string;
   date: Date;
 }
@@ -95,9 +92,9 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
       cell: (props) => <p>{props.getValue()}</p>,
       size: 250,
     }),
-    columnHelper.accessor('status', {
+    columnHelper.accessor('statusName', {
       header: 'Status',
-      cell: (props) => <p>{props.getValue().name}</p>,
+      cell: (props) => <p>{props.getValue()}</p>,
       size: 100,
       enableSorting: false,
     }),

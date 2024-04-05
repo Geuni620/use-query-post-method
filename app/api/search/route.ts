@@ -11,42 +11,27 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
 );
 
-const getRandomDate = (start: Date, end: Date): Date => {
-  return new Date(
-    start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-  );
-};
-
 type ListItem = (typeof data)[0];
-type ListItemWithDate = ListItem & { date: Date };
 
 export async function POST(request: Request) {
   try {
-    const startDate = new Date(2020, 0, 1);
-    const endDate = new Date(2024, 11, 31);
-
     const { searchCondition } = await request.json();
-    const list: ListItem[] = JSON.parse(
-      fs.readFileSync('app/mock/data.json', 'utf-8'),
-    );
+    let data, error;
 
-    const { data, error } = await supabase
-      .from('tasks')
-      .select('*')
-      .ilike('task', `%${searchCondition}%`);
+    if (searchCondition) {
+      // 검색 조건이 있을 경우 해당 조건으로 데이터 조회
+      ({ data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .ilike('task', `%${searchCondition}%`));
+    } else {
+      // 검색 조건이 없거나 유효하지 않은 경우 전체 데이터 조회
+      ({ data, error } = await supabase.from('tasks').select('*'));
+    }
 
     if (error) throw new Error(error.message);
 
-    const listWithRandomDates: ListItemWithDate[] = list.map((item) => ({
-      ...item,
-      date: getRandomDate(startDate, endDate),
-    }));
-
-    const filteredList = listWithRandomDates.filter((item: ListItem) => {
-      return item.task.toLowerCase().includes(searchCondition.toLowerCase());
-    });
-
-    return NextResponse.json({ list: filteredList });
+    return NextResponse.json({ list: data });
   } catch (error) {
     return handleErrorResponse(error);
   }

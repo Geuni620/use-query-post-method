@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import camelcaseKeys from 'camelcase-keys';
 
 const getTableDataViaPOST = async ({
   searchCondition,
@@ -18,8 +19,9 @@ const getTableDataViaPOST = async ({
   }
 
   const data = await res.json();
+  const camelcaseData = camelcaseKeys(data, { deep: true });
 
-  return data;
+  return camelcaseData;
 };
 
 export const useTableDataGetMutation = () => {
