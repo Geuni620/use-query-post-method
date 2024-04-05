@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 import { handleErrorResponse } from '@/app/api/errorHandler';
@@ -20,33 +19,35 @@ const getRandomDate = (start: Date, end: Date): Date => {
 type ListItem = (typeof data)[0];
 type ListItemWithDate = ListItem & { date: Date };
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     const startDate = new Date(2020, 0, 1);
     const endDate = new Date(2024, 11, 31);
 
-    const { searchCondition } = await request.json();
     const list: ListItem[] = JSON.parse(
       fs.readFileSync('app/mock/data.json', 'utf-8'),
     );
-
-    const { data, error } = await supabase
-      .from('tasks')
-      .select('*')
-      .ilike('task', `%${searchCondition}%`);
-
-    if (error) throw new Error(error.message);
 
     const listWithRandomDates: ListItemWithDate[] = list.map((item) => ({
       ...item,
       date: getRandomDate(startDate, endDate),
     }));
 
-    const filteredList = listWithRandomDates.filter((item: ListItem) => {
-      return item.task.toLowerCase().includes(searchCondition.toLowerCase());
-    });
+    const mockupData = listWithRandomDates.map((item: ListItemWithDate) => ({
+      task: item.task,
+      status_id: item.status.id,
+      status_name: item.status.name,
+      notes: item.notes,
+      date: item.date,
+    }));
 
-    return NextResponse.json({ list: filteredList });
+    const { error } = await supabase.from('tasks').insert(mockupData);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json({ message: 'success' });
   } catch (error) {
     return handleErrorResponse(error);
   }

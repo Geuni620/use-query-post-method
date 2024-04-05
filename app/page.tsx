@@ -23,6 +23,8 @@ export default function Home() {
     }
   };
 
+  console.log('tableList', tableList.data?.list);
+
   return (
     <div className="h-screen w-screen">
       <div className="mx-auto w-[900px] pb-20 pt-10">
