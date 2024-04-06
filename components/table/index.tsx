@@ -151,18 +151,6 @@ export const TableComponents: React.FC = () => {
     },
   });
 
-  /**
-   * @description: https://youtu.be/CjqG277Hmgg?si=7u3PV5j-giv2cuB8&t=2044
-   */
-  // const taskName =
-  //   columnFilters.find((column) => column.id === 'task')?.value ?? '';
-
-  // const onFilterChange = ({ id, value }: Filter) => {
-  //   setColumnFilters((prev) =>
-  //     prev.filter((column) => column.id !== id).concat({ id, value }),
-  //   );
-  // };
-
   return (
     <>
       {/* TableControls */}

@@ -133,7 +133,7 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
 
     initialState: {
       pagination: {
-        pageSize: 200,
+        pageSize: 20,
       },
     },
   });
@@ -204,6 +204,31 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
           className="mt-2 text-end"
         >
           Done!
+        </Button>
+      </div>
+
+      <div className="mt-[10px] flex items-center justify-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'‹'}
+        </Button>
+
+        <div className="text-sm font-bold text-slate-500">
+          Page {table.getState().pagination.pageIndex + 1} of{' '}
+          {table.getPageCount()}
+        </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!table.getCanNextPage()}
+          onClick={() => table.nextPage()}
+        >
+          {'›'}
         </Button>
       </div>
     </>
