@@ -69,7 +69,7 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
           aria-label="Select all"
         />
       ),
-      cell: ({ row }) => {
+      cell: ({ row }: RowProps) => {
         return (
           <Checkbox
             checked={row.getIsSelected()}
@@ -146,8 +146,6 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
         newSelectedRows[row.id - 1] = row.done;
       }
     });
-
-    console.log('newSelectedRows', newSelectedRows);
 
     setRowSelection(newSelectedRows);
   }, [data]);

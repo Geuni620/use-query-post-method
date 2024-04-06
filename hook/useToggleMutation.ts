@@ -5,7 +5,7 @@ const changeToggle = async ({
 }: {
   selectedRow: Record<number, boolean>;
 }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/search`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/toggle`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ const changeToggle = async ({
   }
 
   const data = await res.json();
-
+  console.log('data', data);
   return data;
 };
 
