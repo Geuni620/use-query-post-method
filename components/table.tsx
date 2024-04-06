@@ -13,6 +13,7 @@ import {
 import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -33,6 +34,7 @@ interface ColumnDataProps {
   statusName: string;
   notes: string;
   date: Date;
+  done: boolean;
 }
 
 interface TableProps {
@@ -48,6 +50,7 @@ type TableComponentsProps = {
 };
 
 export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
+  console.log('data', data);
   const toggleMutation = useToggleMutation();
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -55,8 +58,7 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
 
   const columnHelper = createColumnHelper<ColumnDataProps>();
   const columns = [
-    {
-      id: 'select',
+    columnHelper.accessor('done', {
       header: ({ table }: TableProps) => (
         <Checkbox
           checked={
@@ -67,15 +69,16 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
           aria-label="Select all"
         />
       ),
-      cell: ({ row }: RowProps) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      size: 50,
-    },
+      cell: ({ row }) => {
+        return (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        );
+      },
+    }),
     columnHelper.accessor('task', {
       header: ({ column }) => {
         return (
@@ -130,10 +133,25 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
 
     initialState: {
       pagination: {
-        pageSize: 20,
+        pageSize: 200,
       },
     },
   });
+
+  // useEffect(() => {
+  //   const newSelectedRows: Record<number, boolean> = {};
+
+  //   data.forEach((row) => {
+  //     console.log('row', row.id, row.done, row.task);
+  //     newSelectedRows[row.id] = row.done;
+  //   });
+
+  //   console.log('newSelectedRows', newSelectedRows);
+
+  //   setRowSelection(newSelectedRows);
+  // }, [data]);
+
+  console.log('rowSelection', rowSelection);
 
   return (
     <>

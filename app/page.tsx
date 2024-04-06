@@ -23,7 +23,7 @@ export default function Home() {
     }
   };
 
-  console.log('tableList', tableList.data?.list);
+  console.log('tableList', tableList);
 
   return (
     <div className="h-screen w-screen">

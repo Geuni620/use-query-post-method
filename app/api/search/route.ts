@@ -24,7 +24,11 @@ export async function POST(request: Request) {
 
     if (error) throw new Error(error.message);
 
-    return NextResponse.json({ list: data });
+    const orderingData = data?.sort((a, b) => {
+      return a.id - b.id;
+    });
+
+    return NextResponse.json({ list: orderingData });
   } catch (error) {
     return handleErrorResponse(error);
   }
