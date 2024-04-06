@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { NextResponse } from 'next/server';
 
 import { handleErrorResponse } from '@/app/api/errorHandler';
@@ -11,24 +13,38 @@ const supabase = createClient(
 export async function POST(request: Request) {
   try {
     const { selectedRow } = await request.json();
+    console.log('server', selectedRow);
+    const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss', { locale: ko });
 
-    const { error: resetError } = await supabase
+    console.log('now', now);
+
+    const { data: currentTasks, error: fetchError } = await supabase
       .from('tasks')
-      .update({ done: false })
-      .gt('id', 0);
+      .select('*');
 
-    if (resetError) throw new Error(resetError.message);
+    const orderingData = currentTasks?.sort((a, b) => a.id - b.id);
 
-    const updates = Object.entries(selectedRow).map(async ([id, done]) => {
-      if (done) {
+    console.log('fetchError', fetchError?.message);
+    if (fetchError) throw new Error(fetchError.message);
+
+    const updates = orderingData?.map(async (task) => {
+      const isSelected = !!selectedRow[task.id - 1];
+
+      if (task.done !== isSelected) {
         const { error } = await supabase
           .from('tasks')
-          .update({ done: true })
-          .match({ id: parseInt(id) + 1 });
+          .update({
+            done: isSelected,
+            date: now,
+          })
+          .match({ id: task.id });
 
+        console.log('error', error?.message);
         if (error) throw new Error(error.message);
       }
     });
+
+    if (!updates) throw new Error('No updates');
 
     await Promise.all(updates);
 
