@@ -13,10 +13,8 @@ const supabase = createClient(
 export async function POST(request: Request) {
   try {
     const { selectedRow } = await request.json();
-    console.log('server', selectedRow);
-    const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss', { locale: ko });
 
-    console.log('now', now);
+    const now = format(new Date(), 'yyyy-MM-dd HH:mm:ss', { locale: ko });
 
     const { data: currentTasks, error: fetchError } = await supabase
       .from('tasks')
@@ -24,7 +22,6 @@ export async function POST(request: Request) {
 
     const orderingData = currentTasks?.sort((a, b) => a.id - b.id);
 
-    console.log('fetchError', fetchError?.message);
     if (fetchError) throw new Error(fetchError.message);
 
     const updates = orderingData?.map(async (task) => {
@@ -39,7 +36,6 @@ export async function POST(request: Request) {
           })
           .match({ id: task.id });
 
-        console.log('error', error?.message);
         if (error) throw new Error(error.message);
       }
     });
