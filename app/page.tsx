@@ -1,25 +1,27 @@
 'use client';
 
-import { FormEvent, useEffect, useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 
 import { TableComponents } from '@/components/table';
 import { Input } from '@/components/ui/input';
-import { useTableDataGetMutation } from '@/hook/useTableDataGetMutation';
+import { useTableDataGetQuery } from '@/hook/useTableDataGetQuery';
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const tableList = useTableDataGetMutation();
+  const tableList = useTableDataGetQuery({
+    searchCondition: inputRef.current?.value || '',
+  });
 
-  useEffect(() => {
-    // 초기 렌더링 시, 결과물을 불러오기 위함
-    tableList.mutateAsync({ searchCondition: '' });
-  }, []);
+  console.log('inputRef.current?.value', inputRef.current?.value);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (inputRef.current) {
-      tableList.mutateAsync({ searchCondition: inputRef.current.value });
+    console.log('inputRef.current?.value', inputRef.current?.value);
+
+    if (inputRef.current?.value) {
+      console.log('hihi');
+      tableList.refetch();
     }
   };
 

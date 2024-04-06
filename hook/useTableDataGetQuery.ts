@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import camelcaseKeys from 'camelcase-keys';
 
 const getTableDataViaPOST = async ({
@@ -6,6 +6,7 @@ const getTableDataViaPOST = async ({
 }: {
   searchCondition: string;
 }) => {
+  console.log('searchCondition', searchCondition);
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/search`, {
     method: 'POST',
     headers: {
@@ -24,17 +25,14 @@ const getTableDataViaPOST = async ({
   return camelcaseData;
 };
 
-export const useTableDataGetMutation = () => {
-  const queryClient = useQueryClient();
+type TableDataProps = {
+  searchCondition: string;
+};
 
-  const tableList = useMutation({
-    mutationFn: getTableDataViaPOST,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['table'],
-      });
-    },
+export const useTableDataGetQuery = ({ searchCondition }: TableDataProps) => {
+  console.log('userTableDataGetQuery', searchCondition);
+  return useQuery({
+    queryFn: () => getTableDataViaPOST({ searchCondition }),
+    queryKey: ['table', searchCondition],
   });
-
-  return tableList;
 };
