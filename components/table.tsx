@@ -138,20 +138,19 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
     },
   });
 
-  // useEffect(() => {
-  //   const newSelectedRows: Record<number, boolean> = {};
+  useEffect(() => {
+    const newSelectedRows: Record<number, boolean> = {};
 
-  //   data.forEach((row) => {
-  //     console.log('row', row.id, row.done, row.task);
-  //     newSelectedRows[row.id] = row.done;
-  //   });
+    data.forEach((row) => {
+      if (row.done) {
+        newSelectedRows[row.id - 1] = row.done;
+      }
+    });
 
-  //   console.log('newSelectedRows', newSelectedRows);
+    console.log('newSelectedRows', newSelectedRows);
 
-  //   setRowSelection(newSelectedRows);
-  // }, [data]);
-
-  console.log('rowSelection', rowSelection);
+    setRowSelection(newSelectedRows);
+  }, [data]);
 
   return (
     <>
