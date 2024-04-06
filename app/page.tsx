@@ -1,28 +1,26 @@
 'use client';
 
-import { FormEvent, useRef } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { TableComponents } from '@/components/table';
 import { Input } from '@/components/ui/input';
 import { useTableDataGetQuery } from '@/hook/useTableDataGetQuery';
 
 export default function Home() {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [searchCondition, setSearchCondition] = useState<string>('');
+
   const tableList = useTableDataGetQuery({
-    searchCondition: inputRef.current?.value || '',
+    searchCondition,
   });
 
-  console.log('inputRef.current?.value', inputRef.current?.value);
+  const onSearchConditionChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchCondition(event.target.value);
+  };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log('inputRef.current?.value', inputRef.current?.value);
-
-    if (inputRef.current?.value) {
-      console.log('hihi');
-      tableList.refetch();
-    }
+    tableList.refetch();
   };
 
   return (
@@ -33,10 +31,11 @@ export default function Home() {
           className="mb-2 flex items-center justify-between gap-2"
         >
           <Input
-            ref={inputRef}
             className="w-[20%]"
             type="text"
             placeholder="Task name"
+            value={searchCondition}
+            onChange={onSearchConditionChange}
           />
         </form>
         <TableComponents data={tableList.data?.list || []} />
