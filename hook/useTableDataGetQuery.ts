@@ -6,7 +6,6 @@ const getTableDataViaPOST = async ({
 }: {
   searchCondition: string;
 }) => {
-  console.log('searchCondition', searchCondition);
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/search`, {
     method: 'POST',
     headers: {
@@ -30,7 +29,6 @@ type TableDataProps = {
 };
 
 export const useTableDataGetQuery = ({ searchCondition }: TableDataProps) => {
-  console.log('userTableDataGetQuery', searchCondition);
   return useQuery({
     queryFn: () => getTableDataViaPOST({ searchCondition }),
     queryKey: ['table', searchCondition],
