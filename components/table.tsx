@@ -50,7 +50,6 @@ type TableComponentsProps = {
 };
 
 export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
-  console.log('data', data);
   const toggleMutation = useToggleMutation();
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

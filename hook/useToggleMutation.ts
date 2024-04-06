@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 const changeToggle = async ({
   selectedRow,
@@ -18,7 +19,7 @@ const changeToggle = async ({
   }
 
   const data = await res.json();
-  console.log('data', data);
+
   return data;
 };
 
@@ -28,6 +29,7 @@ export const useToggleMutation = () => {
   const toggleMutation = useMutation({
     mutationFn: changeToggle,
     onSuccess: () => {
+      toast.success('성공적으로 업데이트 하였습니다!');
       queryClient.invalidateQueries({
         queryKey: ['table'],
       });
