@@ -230,6 +230,11 @@ export const TableComponents: React.FC<TableComponentsProps> = ({ data }) => {
           {'›'}
         </Button>
       </div>
+      <div>
+        {table.getSelectedRowModel().flatRows.map((el) => {
+          return <div key={el.id}>{JSON.stringify(el.original)}</div>;
+        })}
+      </div>
     </>
   );
 };
